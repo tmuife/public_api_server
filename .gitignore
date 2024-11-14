@@ -1,3 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+*.env
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -160,3 +164,58 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+.idea/compiler.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/compiler.xml
+.idea/vcs.xml
+.idea/*
+/**/.idea
+/**/metastore_db
+/**/ojdbc8-full
+/**/repo
+/**/ojdbc8-full.zip
+/**/*.log
+/*/.idea/**
+/*/.idea/**/*
+/**/.ipynb_checkpoints/**/*
+/**/venv/**
+/**/venv_win/**
+/**/__*.pyc
+/**/__pycache__
+/**/confluence_data/**/*
+/**/mysqldatadir/**/*
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+/**/.mvn/**/*
+# AWS User-specific
+.idea/**/aws.xml
+
+# Generated files
+.idea/**/contentModel.xml
+
+# Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+/**/venv/**
+/**/.venv/**
+/**/venv_win/**
+/**/__*.pyc
+/**/__pycache__
+/**/*.onnx
+/**/*.dat
+/**/.DS_Store
+/**/config.ini
