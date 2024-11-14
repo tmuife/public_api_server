@@ -38,7 +38,7 @@ def base64ToImage(base64_string,type = 'RGB'):
 
 
 router = APIRouter(
-    prefix="/secure",
+    prefix="/clip",
     tags=["SECURE"],
     responses={404: {"message": "Not found"}},
     dependencies=[Security(get_api_key)]

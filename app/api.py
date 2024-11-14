@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import template, secure, m3_router, clip_router
+from app.routers import template, secure, m3_router, clip_router, paddleocr_router
 from app.tag import SubTags, Tags
 
 app = FastAPI(
@@ -9,9 +9,9 @@ app = FastAPI(
     version="0.0.1",
     terms_of_service="http://example.com/terms/",
     contact={
-        "name": "Information and Digital Technology Center (IDT)",
-        "url": "https://codeinsane.wordpress.com/",
-        "email": "natthasath.sak@gmail.com",
+        "name": "",
+        "url": "",
+        "email": "jinshuhaicc@gmail.com",
     },
     license_info={
         "name": "Apache 2.0",
@@ -36,6 +36,7 @@ app.include_router(template.router)
 app.include_router(secure.router)
 app.include_router(m3_router.router)
 app.include_router(clip_router.router)
+app.include_router(paddleocr_router.router)
 #
 #
 

@@ -17,7 +17,7 @@ processor = RequestProcessor(model, accumulation_timeout=request_flush_timeout, 
 
 
 router = APIRouter(
-    prefix="/secure",
+    prefix="/bge",
     tags=["SECURE"],
     responses={404: {"message": "Not found"}},
     dependencies=[Security(get_api_key)]
