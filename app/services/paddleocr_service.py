@@ -1,5 +1,5 @@
 from PIL import Image
-from paddleocr import PaddleOCR, draw_ocr
+#from paddleocr import PaddleOCR, draw_ocr
 import numpy as np
 import base64
 from io import BytesIO

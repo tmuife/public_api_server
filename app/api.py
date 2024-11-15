@@ -9,8 +9,8 @@ app = FastAPI(
     version="0.0.1",
     terms_of_service="http://example.com/terms/",
     contact={
-        "name": "",
-        "url": "",
+        "name": "Walter",
+        "url": "http://www.demo.com",
         "email": "jinshuhaicc@gmail.com",
     },
     license_info={

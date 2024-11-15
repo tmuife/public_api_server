@@ -24,8 +24,8 @@ pyflakes = "^3.2.0"
 flagembedding = "^1.3.2"
 pillow = "^11.0.0"
 clip = "^0.2.0"
-paddlepaddle = "^2.6.2"
-paddleocr = "^2.9.1"
+#paddlepaddle = "^2.6.2"
+#paddleocr = "^2.9.1"
 
 [build-system]
 requires = ["poetry-core"]
