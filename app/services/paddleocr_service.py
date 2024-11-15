@@ -7,6 +7,7 @@ from io import BytesIO
 
 class PPOCR:
     def __init__(self, use_angle_cls=True, lang='ch'):
+        pass
         #self.ocr = PaddleOCR(use_angle_cls=True, lang='ch')
 
     def recognize(self, base_img):
