@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import template, secure, m3_router, clip_router, paddleocr_router
+from app.routers import template, secure, m3_router, clip_router, paddleocr_router, florence_router
 from app.tag import SubTags, Tags
 
 app = FastAPI(
@@ -37,6 +37,7 @@ app.include_router(secure.router)
 app.include_router(m3_router.router)
 app.include_router(clip_router.router)
 app.include_router(paddleocr_router.router)
+app.include_router(florence_router.router)
 #
 #
 
