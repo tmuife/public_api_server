@@ -37,7 +37,7 @@ app.include_router(secure.router)
 app.include_router(m3_router.router)
 app.include_router(clip_router.router)
 app.include_router(paddleocr_router.router)
-app.include_router(florence_router.router)
+#app.include_router(florence_router.router)
 #
 #
 
