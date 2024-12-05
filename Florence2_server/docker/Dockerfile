@@ -1,9 +1,10 @@
-FROM python:3.10
+FROM python:3.12
 
 WORKDIR /code
 
 COPY ./poetry.lock /code/poetry.lock
 COPY ./pyproject.toml /code/pyproject.toml
+COPY ./poetry.toml /code/poetry.toml
 COPY ./.env /code/.env
 COPY ./main.py /code/main.py
 COPY ./app /code/app
