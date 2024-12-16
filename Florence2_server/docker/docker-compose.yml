@@ -7,7 +7,7 @@ services:
     container_name: public_florence_api
     restart: always
     ports:
-      - 8000:8000
+      - 5000:8000
     networks:
       - default
 
