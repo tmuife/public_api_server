@@ -4,7 +4,7 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    container_name: app
+    container_name: public_florence_api
     restart: always
     ports:
       - 8000:8000
