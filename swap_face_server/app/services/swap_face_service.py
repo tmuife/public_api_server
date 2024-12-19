@@ -4,6 +4,7 @@ import cv2
 import numpy
 import insightface
 from PIL import Image, ImageDraw
+from joblib.externals.cloudpickle import instance
 from torch.nn.functional import embedding
 from typing import TypedDict, Union, Literal, Generic, TypeVar
 import gfpgan
@@ -22,12 +23,13 @@ Frame = numpy.ndarray[Any, Any]
 #)
 #from modules.cluster_analysis import find_closest_centroid
 import os
+execution_providers: List[str] = []
 
-
-class swap:
+class Swap:
     def __init__(self):
         abs_dir = os.path.abspath(__file__)
-        self._models_dir = os.path.join(os.path.dirname(abs_dir), 'models')
+        self._models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(abs_dir))), 'models')
+        print(self._models_dir)
         self._detect_model_path = os.path.join(self._models_dir, 'face_detection_yunet_2023mar.onnx')
         self._detect_model = cv2.FaceDetectorYN.create(
             model=self._detect_model_path,
@@ -41,10 +43,34 @@ class swap:
         )
         self._recognition_model_path = os.path.join(self._models_dir, 'w600k_r50.onnx')
         self._recognition_model = model_zoo.get_model(self._recognition_model_path)
-        print(self._models_dir)
+        self._swap_model_path = os.path.join(self._models_dir, 'inswapper_128.onnx')
+        self._face_swapper = insightface.model_zoo.get_model(
+            self._swap_model_path,
+            providers=execution_providers
+        )
+        self._enhance_model_path = os.path.join(self._models_dir, 'GFPGANv1.4.pth')
+        self._face_enhancer = gfpgan.GFPGANer(model_path=self._enhance_model_path, upscale=1)  # type: ignore[attr-defined]
+        self.source_face = None
+        self.target_face = None
+
 
     @staticmethod
-    def base64_image(base64_string, ptype='RGB'):
+    def frame_2_base64(image: Frame):
+        _, buffer = cv2.imencode('.jpg', image)
+        img_base64 = base64.b64encode(buffer.tobytes()).decode('utf-8')
+        return img_base64
+
+    @staticmethod
+    def base64_2_frame(base_str):
+        img_data = base64.b64decode(base_str)
+        # Step 3: Convert bytes into a NumPy array
+        img_array = np.frombuffer(img_data, dtype=np.uint8)
+        # Step 4: Decode the NumPy array into an OpenCV image
+        image = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+        return image
+
+    @staticmethod
+    def base64_2_pil(base64_string, ptype='RGB'):
         image_bytes = base64.b64decode(base64_string)
         image_buffer = BytesIO(image_bytes)
         image = Image.open(image_buffer)
@@ -68,6 +94,28 @@ class swap:
         dist = np.sqrt(np.sum(np.square(feature_1 - feature_2)))
         return dist
 
+    def set_source_face(self, image_or_path: Union[str, Frame], multi=False):
+        if not multi:
+            image: Union[str, Frame]
+            if isinstance(image_or_path, str):
+                image = cv2.imread(image_or_path)
+            else:
+                image = image_or_path
+            faces = self.get_face(image)
+            if len(faces)>0:
+                self.source_face = faces[0]
+
+    def set_target_face(self, image_or_path: Union[str, Frame], multi=False):
+        if not multi:
+            image: Union[str, Frame]
+            if isinstance(image_or_path, str):
+                image = cv2.imread(image_or_path)
+            else:
+                image = image_or_path
+            faces = self.get_face(image)
+            if len(faces)>0:
+                self.target_face = faces[0]
+
     def get_face(self, img_path: Union[str, Frame]):
         image: Union[str, Frame]
         if isinstance(img_path, str):
@@ -75,9 +123,9 @@ class swap:
         else:
             image = img_path
         (frame_h, frame_w) = image.shape[:2]
-        yunet.setInputSize([frame_w, frame_h])
-        _, faces = yunet.detect(image)  # # faces: None, or nx15 np.array
-        return_faces = []
+        self._detect_model.setInputSize([frame_w, frame_h])
+        _, faces = self._detect_model.detect(image)  # # faces: None, or nx15 np.array
+        detected_faces = []
         if faces is not None:
             for idx, face in enumerate(faces):
                 coords = face[:-1].astype(np.int32)
@@ -93,97 +141,43 @@ class swap:
                 det_score = face[-1]
                 bbox = np.array(box).astype(np.float32)
                 _face = Face(bbox=bbox, kps=np.array(kps), det_score=det_score)
-                rec_model.get(image, _face)
-                return_faces.append(_face)
-        return return_faces
+                self._recognition_model.get(image, _face)
+                detected_faces.append(_face)
+        return detected_faces
 
     def swap_face(self, source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
-        model_path = os.path.join(models_dir, 'inswapper_128.onnx')
-        face_swapper = insightface.model_zoo.get_model(
-            model_path, providers=modules.globals.execution_providers
-        )
-        swapped_frame = face_swapper.get(
+        if self.source_face is None or self.target_face is None:
+            print("Please set source and target face first!")
+            exit(-1)
+        swapped_frame = self._face_swapper.get(
             temp_frame, target_face, source_face, paste_back=True
         )
         return swapped_frame
 
     def enhance_face(self, temp_frame: Frame) -> Frame:
-        model_path = os.path.join(models_dir, 'GFPGANv1.4.pth')
-        face_enhancer = gfpgan.GFPGANer(model_path=model_path, upscale=1)  # type: ignore[attr-defined]
-        _, _, temp_frame = face_enhancer.enhance(temp_frame, paste_back=True)
+        _, _, temp_frame = self._face_enhancer.enhance(temp_frame, paste_back=True)
         return temp_frame
 
-    def convert(self, id_or_path):
-        cap = cv2.VideoCapture(id_or_path)
-        if cap.isOpened():
-            w, h, fps = (int(cap.get(x)) for x in (cv2.CAP_PROP_FRAME_WIDTH,
-                                                   cv2.CAP_PROP_FRAME_HEIGHT,
-                                                   cv2.CAP_PROP_FPS))
-            _face_source = get_face("/Users/walter/Downloads/unknown.jpg")
 
-            _target_face = get_face("/Users/walter/Downloads/walter.jpg")
-            model_path = os.path.join(models_dir, 'inswapper_128.onnx')
-            face_swapper = insightface.model_zoo.get_model(
-                model_path, providers=modules.globals.execution_providers
-            )
-
-            while True:
-                success, frame = cap.read()
-                out_frame = face_swapper.get(
-                    frame, _target_face, _face_source, paste_back=True
-                )
-                cv2.imshow('Live', out_frame)
-                time.sleep(10)
-                if cv2.waitKey(1) == 27:
-                    break
-            cap.release()
-            cv2.destroyAllWindows()
-
-    def swap_example(self):
-        # the face you want
-        _face_source = get_face("/Users/walter/Downloads/walter.jpg")
-        # _face_source = get_face(pil_2_cv2(base64ToImage(img)))
-        # the face will be replaced
-        _target_face = get_face("/Users/walter/Downloads/Messi.jpg")
-        input_frame = cv2.imread("/Users/walter/Downloads/Messi.jpg")
-        out_frame = swap_face(source_face=_face_source[0], target_face=_target_face[0], temp_frame=input_frame)
-        cv2.imwrite("/Users/walter/Downloads/Messi_swapped.jpg", out_frame)
-
-    def swap_example2(self):
-        # the face you want
-        _source_face = None
-        _faces = get_face("/Users/walter/Downloads/Messi.jpg")
-        # _faces = get_face(pil_2_cv2(base64ToImage(img)))
-        if len(_faces) > 0:
-            _source_face = _faces[0]
-        # _face_source = get_face(pil_2_cv2(base64ToImage(img)))
-        # the face will be replaced
-        _target_face = None
-        _target_embedding = None
-        _faces = get_face("/Users/walter/Downloads/walter.jpg")
-        if len(_faces) > 0:
-            _target_face = _faces[0]
-            _target_embedding = _target_face.normed_embedding
-
-        input_frame = cv2.imread("/Users/walter/Downloads/me_and_other.jpg")
-        _faces = get_face(input_frame)
-        for _face in _faces:
-            _embedding = _face.normed_embedding
-            distance = euclidean_distance(_embedding, _target_embedding)
-            print(distance)
-            if distance < 0.6:
-                out_frame = swap_face(source_face=_source_face, target_face=_face, temp_frame=input_frame)
-                while True:
-                    cv2.imshow('Live', out_frame)
-                    time.sleep(1)
-                    if cv2.waitKey(1) == 27:
-                        break
-                cv2.destroyAllWindows()
-
-    def enhance_example(self):
-        source_frame = "/Users/walter/Downloads/Messi_swapped.jpg"
-        image_enhanced = enhance_face(cv2.imread(source_frame))
-        cv2.imwrite("/Users/walter/Downloads/Messi_swapped_enhanced.jpg", image_enhanced)
-
-
-_s = swap()
+#_s = Swap()
+#_s.set_source_face("/Users/walter/Downloads/walter.jpg")
+### the face will be replaced
+#_s.set_target_face("/Users/walter/Downloads/embedding.jpg")
+#cap = cv2.VideoCapture("/Users/walter/Downloads/embedding.mp4")
+#while cap.isOpened():
+#    success, input_frame = cap.read()
+#    if success:
+#        #input_frame = cv2.imread("/Users/walter/Downloads/me_and_other.jpg")
+#        _faces = _s.get_face(input_frame)
+#        for _face in _faces:
+#            _embedding = _face.normed_embedding
+#            distance = _s.euclidean_distance(_embedding, _s.target_face.normed_embedding)
+#            print(distance)
+#            if distance < 0.6:
+#                out_frame = _s.swap_face(source_face=_s.source_face, target_face=_face, temp_frame=input_frame)
+#                #out_frame = _s.enhance_face(out_frame)
+#                cv2.imshow('Live', out_frame)
+#                time.sleep(0.01)
+#    if cv2.waitKey(1) == 27:
+#        break
+#    cv2.destroyAllWindows()

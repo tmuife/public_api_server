@@ -1,10 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import (template, secure,
-                         m3_router,
-                         clip_router,
-                         paddleocr_router,
-                         insightface_router
+                         swap_face_router
                          )
 from app.tag import SubTags, Tags
 
@@ -39,10 +36,11 @@ app.add_middleware(
 
 app.include_router(template.router)
 app.include_router(secure.router)
-app.include_router(m3_router.router)
-app.include_router(clip_router.router)
-app.include_router(paddleocr_router.router)
-app.include_router(insightface_router.router)
+#app.include_router(m3_router.router)
+#app.include_router(clip_router.router)
+#app.include_router(paddleocr_router.router)
+#app.include_router(insightface_router.router)
+app.include_router(swap_face_router.router)
 #
 #
 

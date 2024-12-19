@@ -216,6 +216,7 @@ cython_debug/
 /**/__*.pyc
 /**/__pycache__
 /**/*.onnx
+/**/*.pth
 /**/*.dat
 /**/.DS_Store
 /**/config.ini
