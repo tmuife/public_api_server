@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 #from joblib.externals.cloudpickle import instance
 #from torch.nn.functional import embedding
 from typing import TypedDict, Union, Literal, Generic, TypeVar
-#import gfpgan
+import gfpgan
 import numpy as np
 #import modules.globals
 from insightface.model_zoo import model_zoo
@@ -23,7 +23,6 @@ Frame = numpy.ndarray[Any, Any]
 #)
 #from modules.cluster_analysis import find_closest_centroid
 import os
-#CUDAExecutionProvider
 execution_providers: List[str] = []
 
 class Swap:
@@ -49,8 +48,8 @@ class Swap:
             self._swap_model_path,
             providers=execution_providers
         )
-        #self._enhance_model_path = os.path.join(self._models_dir, 'GFPGANv1.4.pth')
-        #self._face_enhancer = gfpgan.GFPGANer(model_path=self._enhance_model_path, upscale=1)  # type: ignore[attr-defined]
+        self._enhance_model_path = os.path.join(self._models_dir, 'GFPGANv1.4.pth')
+        self._face_enhancer = gfpgan.GFPGANer(model_path=self._enhance_model_path, upscale=1)  # type: ignore[attr-defined]
         self.source_face = None
         self.target_face = None
 
@@ -172,9 +171,9 @@ class Swap:
                 return swapped_frame
         return temp_frame
 
-#    def enhance_face(self, temp_frame: Frame) -> Frame:
-#        _, _, temp_frame = self._face_enhancer.enhance(temp_frame, paste_back=True)
-#        return temp_frame
+    def enhance_face(self, temp_frame: Frame) -> Frame:
+        _, _, temp_frame = self._face_enhancer.enhance(temp_frame, paste_back=True)
+        return temp_frame
 
 
 #_s = Swap()

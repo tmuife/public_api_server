@@ -61,20 +61,20 @@ def swap_face(item:Item):
     except Exception as e:
         return jsonMsg("fail", None, e)
 
-#@router.post("/swap_face_and_enhance")
-#def swap_face_and_enhance(item:Item):
-#    content = item.content
-#    try:
-#        frame = swap.enhance_face(swap.swap_face(swap.source_face, swap.target_face, swap.base64_2_frame(content)))
-#        return jsonMsg("success", swap.frame_2_base64(frame), None)
-#    except Exception as e:
-#        return jsonMsg("fail", None, e)
-#
-#@router.post("/enhance_face")
-#def enhance_face(item:Item):
-#    content = item.content
-#    try:
-#        frame = swap.enhance_face(swap.base64_2_frame(content))
-#        return jsonMsg("success", swap.frame_2_base64(frame), None)
-#    except Exception as e:
-#        return jsonMsg("fail", None, e)
+@router.post("/swap_face_and_enhance")
+def swap_face_and_enhance(item:Item):
+    content = item.content
+    try:
+        frame = swap.enhance_face(swap.swap_face(swap.source_face, swap.target_face, swap.base64_2_frame(content)))
+        return jsonMsg("success", swap.frame_2_base64(frame), None)
+    except Exception as e:
+        return jsonMsg("fail", None, e)
+
+@router.post("/enhance_face")
+def enhance_face(item:Item):
+    content = item.content
+    try:
+        frame = swap.enhance_face(swap.base64_2_frame(content))
+        return jsonMsg("success", swap.frame_2_base64(frame), None)
+    except Exception as e:
+        return jsonMsg("fail", None, e)
