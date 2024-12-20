@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM cnstark/pytorch:2.0.1-py3.10.11-cuda11.8.0-ubuntu22.04
 
 WORKDIR /code
 
@@ -13,6 +13,7 @@ COPY ./certs/localhost.crt /etc/ssl/certs/
 COPY ./certs/localhost.key /etc/ssl/certs/
 
 COPY ./models /code/models
+COPY ./gfpgan /code/gfpgan
 
 RUN apt-get update && apt-get install -y && apt-get install ffmpeg -y \
     build-essential libsndfile1 \
