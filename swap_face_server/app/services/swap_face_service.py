@@ -4,8 +4,8 @@ import cv2
 import numpy
 import insightface
 from PIL import Image, ImageDraw
-from joblib.externals.cloudpickle import instance
-from torch.nn.functional import embedding
+#from joblib.externals.cloudpickle import instance
+#from torch.nn.functional import embedding
 from typing import TypedDict, Union, Literal, Generic, TypeVar
 import gfpgan
 import numpy as np
@@ -14,7 +14,7 @@ from insightface.model_zoo import model_zoo
 from io import BytesIO
 import base64
 from insightface.app.common import Face
-from insightface.app import FaceAnalysis
+#from insightface.app import FaceAnalysis
 Frame = numpy.ndarray[Any, Any]
 #from modules.utilities import (
 #    conditional_download,
