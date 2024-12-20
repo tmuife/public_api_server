@@ -145,7 +145,7 @@ class Swap:
                 detected_faces.append(_face)
         return detected_faces
 
-    def swap_face(self, source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
+    def swap_face_deprecated(self, source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
         if self.source_face is None or self.target_face is None:
             print("Please set source and target face first!")
             exit(-1)
@@ -153,6 +153,23 @@ class Swap:
             temp_frame, target_face, source_face, paste_back=True
         )
         return swapped_frame
+
+    # just swap single face
+    def swap_face(self, source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
+        if self.source_face is None or self.target_face is None:
+            print("Please set source and target face first!")
+            exit(-1)
+        _faces = self.get_face(temp_frame)
+        for _face in _faces:
+            _embedding = _face.normed_embedding
+            distance = self.euclidean_distance(_embedding, self.target_face.normed_embedding)
+            print(distance)
+            if distance < 0.9:
+                swapped_frame = self._face_swapper.get(
+                    temp_frame, _face, source_face, paste_back=True
+                )
+                return swapped_frame
+        return temp_frame
 
     def enhance_face(self, temp_frame: Frame) -> Frame:
         _, _, temp_frame = self._face_enhancer.enhance(temp_frame, paste_back=True)

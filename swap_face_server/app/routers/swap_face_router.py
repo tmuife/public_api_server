@@ -43,8 +43,8 @@ def set_source_face(item:Item):
     except Exception as e:
         return jsonMsg("fail", None, e)
 
-@router.post("/set_source_face")
-def set_source_face(item:Item):
+@router.post("/set_target_face")
+def set_target_face(item:Item):
     content = item.content
     try:
         swap.set_target_face(swap.base64_2_frame(content))
