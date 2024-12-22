@@ -41,3 +41,7 @@ torchvision        0.15.2+cu118
 triton             2.0.0
 typing_extensions  4.7.1
 urllib3            2.0.4
+
+
+https://docs.nvidia.com/deeplearning/cudnn/latest/reference/support-matrix.html#support-matrix
+sudo apt-get -y install cudnn9-cuda-12

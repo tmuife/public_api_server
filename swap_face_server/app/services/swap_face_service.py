@@ -14,7 +14,8 @@ from insightface.model_zoo import model_zoo
 from io import BytesIO
 import base64
 from insightface.app.common import Face
-#from insightface.app import FaceAnalysis
+from insightface.app import FaceAnalysis
+from decouple import config
 Frame = numpy.ndarray[Any, Any]
 #from modules.utilities import (
 #    conditional_download,
@@ -24,7 +25,8 @@ Frame = numpy.ndarray[Any, Any]
 #from modules.cluster_analysis import find_closest_centroid
 import os
 #CUDAExecutionProvider
-execution_providers: List[str] = []
+execution_providers: List[str] = [config("execution_providers")]
+detect_method=config("detect_method")
 
 class Swap:
     def __init__(self):
@@ -51,6 +53,8 @@ class Swap:
         )
         #self._enhance_model_path = os.path.join(self._models_dir, 'GFPGANv1.4.pth')
         #self._face_enhancer = gfpgan.GFPGANer(model_path=self._enhance_model_path, upscale=1)  # type: ignore[attr-defined]
+        self._face_analyser = insightface.app.FaceAnalysis(name='buffalo_l', providers=execution_providers)
+        self._face_analyser.prepare(ctx_id=0, det_size=(640, 640))
         self.source_face = None
         self.target_face = None
 
@@ -117,34 +121,46 @@ class Swap:
             if len(faces)>0:
                 self.target_face = faces[0]
 
-    def get_face(self, img_path: Union[str, Frame]):
+    def get_oneface(self, frame: Frame) -> Any:
+        face = self._face_analyser.get(frame)
+        try:
+            return min(face, key=lambda x: x.bbox[0])
+        except ValueError:
+            return None
+    def get_face(self, img_path: Union[str, Frame], method=detect_method):
         image: Union[str, Frame]
         if isinstance(img_path, str):
             image = cv2.imread(img_path)
         else:
             image = img_path
-        (frame_h, frame_w) = image.shape[:2]
-        self._detect_model.setInputSize([frame_w, frame_h])
-        _, faces = self._detect_model.detect(image)  # # faces: None, or nx15 np.array
-        detected_faces = []
-        if faces is not None:
-            for idx, face in enumerate(faces):
-                coords = face[:-1].astype(np.int32)
-                box = [
-                    (coords[0], coords[1]),
-                    (coords[0] + coords[2], coords[1] + coords[3])
-                ]
-                kps = [np.array([coords[4], coords[5]]).astype(np.float32),
-                       np.array([coords[6], coords[7]]).astype(np.float32),
-                       np.array([coords[8], coords[9]]).astype(np.float32),
-                       np.array([coords[10], coords[11]]).astype(np.float32),
-                       np.array([coords[12], coords[13]]).astype(np.float32)]
-                det_score = face[-1]
-                bbox = np.array(box).astype(np.float32)
-                _face = Face(bbox=bbox, kps=np.array(kps), det_score=det_score)
-                self._recognition_model.get(image, _face)
-                detected_faces.append(_face)
-        return detected_faces
+        if method=="insight":
+            try:
+                return self._face_analyser.get(image)
+            except IndexError:
+                return None
+        if method=="yu":
+            (frame_h, frame_w) = image.shape[:2]
+            self._detect_model.setInputSize([frame_w, frame_h])
+            _, faces = self._detect_model.detect(image)  # # faces: None, or nx15 np.array
+            detected_faces = []
+            if faces is not None:
+                for idx, face in enumerate(faces):
+                    coords = face[:-1].astype(np.int32)
+                    box = [
+                        (coords[0], coords[1]),
+                        (coords[0] + coords[2], coords[1] + coords[3])
+                    ]
+                    kps = [np.array([coords[4], coords[5]]).astype(np.float32),
+                           np.array([coords[6], coords[7]]).astype(np.float32),
+                           np.array([coords[8], coords[9]]).astype(np.float32),
+                           np.array([coords[10], coords[11]]).astype(np.float32),
+                           np.array([coords[12], coords[13]]).astype(np.float32)]
+                    det_score = face[-1]
+                    bbox = np.array(box).astype(np.float32)
+                    _face = Face(bbox=bbox, kps=np.array(kps), det_score=det_score)
+                    self._recognition_model.get(image, _face)
+                    detected_faces.append(_face)
+            return detected_faces
 
     def swap_face_deprecated(self, source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
         if self.source_face is None or self.target_face is None:
