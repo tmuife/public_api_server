@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  florence_service:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: public_florence_api
+    restart: always
+    ports:
+      - 5000:8000
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
