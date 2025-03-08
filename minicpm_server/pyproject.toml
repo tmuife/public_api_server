@@ -8,7 +8,7 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 fastapi = "^0.115.4"
 pandas = "^2.2.3"
 numpy = "^1.23.0"
@@ -28,7 +28,7 @@ vector-quantize-pytorch = "^1.18.5"
 vocos = "^0.1.0"
 decord = "^0.6.0"
 moviepy = "^2.1.2"
-flash-attn = { version = "*", allow-prereleases = true }
+#flash-attn = { version = "*", allow-prereleases = true }
 python-decouple = "^3.8"
 modelscope-studio = { url = "http://thunlp.oss-cn-qingdao.aliyuncs.com/multi_modal/never_delete/modelscope_studio-0.4.0.9-py3-none-any.whl" }
 aiofiles = "^23.2.1"
