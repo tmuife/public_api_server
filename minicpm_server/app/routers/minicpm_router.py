@@ -43,14 +43,14 @@ router = APIRouter(
     dependencies=[Security(get_api_key)]
 )
 @router.post("/image_chat")
-def image_process(item:Item):
+async def image_process(item:Item):
     img_content = item.img_content
     question = item.question
     image = base64ToImage(img_content)
     #question = "Provide a description of the image in English."
     msgs = [{'role': 'user', 'content': [image, question]}]
 
-    res = cpm_service.chat_omni(msgs=msgs, generate_audio=False, output_audio_path="/tmp")
+    res = await cpm_service.chat_omni(msgs=msgs, generate_audio=False, output_audio_path="/tmp")
     print(res)
     print(str(res).replace("\n", "").replace("<|endoftext|>", ""))
     return jsonMsg("success", res, None)
