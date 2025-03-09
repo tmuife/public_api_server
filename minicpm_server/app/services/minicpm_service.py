@@ -31,7 +31,7 @@ class CPMService:
         self.tokenizer: AutoTokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
         self.model.init_tts()
 
-    async def chat_omni(self, msgs:list[dict],generate_audio:bool, output_audio_path:bool):
+    async def chat_omni(self, msgs:list[dict],generate_audio:bool, output_audio_path:str):
         res = self.model.chat(
             msgs=msgs,
             tokenizer=self.tokenizer,

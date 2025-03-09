@@ -13,8 +13,8 @@ from transformers import AutoProcessor, AutoModelForCausalLM
 
 cpm_service = CPMService()
 class Item(BaseModel):
-    content: str
-    prompt: str
+    img_content: str
+    question: str
 
 
 def jsonMsg(status, data, error):
@@ -42,25 +42,15 @@ router = APIRouter(
     responses={404: {"message": "Not found"}},
     dependencies=[Security(get_api_key)]
 )
-@router.post("/image_process")
+@router.post("/image_chat")
 def image_process(item:Item):
-    #prompt = "<OD>"
-    prompt = item.prompt
-    #url = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/car.jpg?download=true"
-    #image = Image.open(requests.get(url, stream=True).raw)
-    image = base64ToImage(item.content)
-    inputs = processor(text=prompt, images=image, return_tensors="pt").to(device, torch_dtype)
-    generated_ids = model.generate(
-        input_ids=inputs["input_ids"],
-        pixel_values=inputs["pixel_values"],
-        max_new_tokens=1024,
-        num_beams=3,
-        do_sample=False
-    )
-    generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
+    img_content = item.img_content
+    question = item.question
+    image = base64ToImage(img_content)
+    #question = "Provide a description of the image in English."
+    msgs = [{'role': 'user', 'content': [image, question]}]
 
-    parsed_answer = processor.post_process_generation(generated_text, task="<OD>",
-                                                      image_size=(image.width, image.height))
-
-    print(parsed_answer)
-    return jsonMsg("success", parsed_answer, None)
+    res = cpm_service.chat_omni(msgs=msgs, generate_audio=False, output_audio_path="/tmp")
+    print(res)
+    print(str(res).replace("\n", "").replace("<|endoftext|>", ""))
+    return jsonMsg("success", res, None)
