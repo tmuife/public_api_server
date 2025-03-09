@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "public_api_server"
 version = "0.1.0"
-description = "Florence server"
+description = "MiniCPM server"
 authors = ["Walter Jin <jinshuhaicc@gmail.com>"]
 license = "MIT License"
 readme = "README.md"
