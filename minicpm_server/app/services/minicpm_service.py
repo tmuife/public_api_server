@@ -48,7 +48,8 @@ class CPMService:
         )
         return res
 
-    async def get_video_chunk_content(self, video_path, flatten=True):
+    @staticmethod
+    def get_video_chunk_content(video_path, flatten=True):
         video = VideoFileClip(video_path)
         print('video_duration:', video.duration)
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as temp_audio_file:
