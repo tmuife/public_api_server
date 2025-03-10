@@ -11,5 +11,6 @@ def wav_to_base64(file_path: str) -> str:
 
 
 # 示例：读取一个 WAV 文件
-base64_audio_string = wav_to_base64('/Users/walter/Downloads/speech_orig.wav')
-print(base64_audio_string)  # 打印前100个字符做预览
+base64_audio_string = wav_to_base64('/Users/walter/Downloads/youtube/break.wav')
+with open("/Users/walter/Downloads/youtube/break.txt","w") as file:
+    file.write(base64_audio_string)
