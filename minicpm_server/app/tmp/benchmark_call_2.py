@@ -34,6 +34,9 @@ def call_image_query(batch, name, baseimg):
         print(jobj["data"]["text"])
     else:
         print(f"请求失败，状态码: {response.status_code}, 错误信息: {response.text}")
+    _now = datetime.now()
+    print("当前时间是：", _now)
+
 def image_to_base64(image_path: str) -> str:
     # 打开图片
     with Image.open(image_path) as img:
@@ -67,5 +70,3 @@ if __name__ == "__main__":
             # 等待所有线程完成
             #thread.join()
         print("所有线程执行完毕。")
-    now = datetime.now()
-    print("当前时间是：", now)
