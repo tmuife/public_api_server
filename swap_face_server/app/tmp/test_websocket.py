@@ -169,7 +169,12 @@ async def convert_video_video_local():
     swap.set_source_face(cv2.imread(os.path.join(base_dir,source_face)))
     swap.set_target_face(cv2.imread(os.path.join(base_dir,target_face)))
     frame_index = 0
-    while cap.isOpened():
+
+    # Check if the video opened successfully
+    if not cap.isOpened():
+        print("Error: Cannot open video file.")
+        exit()
+    while True:
         print(frame_index)
         frame_index += 1
         success, input_frame = cap.read()
@@ -177,7 +182,7 @@ async def convert_video_video_local():
             break
         if success:
             convert_frame = await swap.swap_face(swap.source_face, swap.target_face, input_frame)
-            _out.write(binary_2_frame(convert_frame))
+            _out.write(convert_frame)
     _out.release()
     cap.release()
     cv2.destroyAllWindows()
