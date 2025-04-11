@@ -6,8 +6,11 @@ from decouple import config
 import json, io
 import requests
 import base64
+import time
 from typing import Any, List
 import numpy,cv2
+from dbutil import mysql as mydb
+
 Frame = numpy.ndarray[Any, Any]
 
 
@@ -104,7 +107,82 @@ async def call_websocket():
 
         print("Done sending messages. Closing connection.")
 
+async def convert_video_video():
+    token = config("API_KEY")
+    base_dir = config("base_dir")
+    target_face = "target_face.jpg"
+    raw_video = "test.mp4"
+    uri = f"ws://140.238.3.222:7860/ws?access_token={token}"
+    db = mydb()
+    df = db.query("select raw from stop_image where id=7")
+    source_face_base = df.to_dict('records')[0]["raw"]
+    now = datetime.now()
+    fourcc = cv2.VideoWriter.fourcc('M', 'P', '4', 'V')  # 文件扩展名.mp4
+    source_face = {"face_type": "source", "face_data": source_face_base}
+    target_face = {"face_type": "target", "face_data": frame_2_base64(cv2.imread(os.path.join(base_dir, target_face)))}
+    cap = cv2.VideoCapture(os.path.join(base_dir,raw_video))
+    _out = cv2.VideoWriter(os.path.join(base_dir,'convert_{}.mp4'.format(str(now).replace(":", ''))), fourcc, cap.get(cv2.CAP_PROP_FPS),
+                           (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
+
+    async with websockets.connect(uri) as websocket:
+        await websocket.send(json.dumps(source_face))
+        response = await websocket.recv()
+        print(response)
+
+        await websocket.send(json.dumps(target_face))
+        response = await websocket.recv()
+        print(response)
+
+        frame_index = 0
+        while cap.isOpened():
+            print(frame_index)
+            frame_index += 1
+            success, input_frame = cap.read()
+            if not success:
+                break
+            if success:
+                binary_data = frame_2_binary(input_frame)
+                await websocket.send(binary_data)
+                response = await websocket.recv()
+                _out.write(binary_2_frame(response))
+            if cv2.waitKey(1) == 27:
+                break
+        _out.release()
+        cap.release()
+        cv2.destroyAllWindows()
+
+async def convert_video_video_local():
+    base_dir = config("base_dir")
+    target_face = "target_face.jpg"
+    source_face = "source.jpg"
+    raw_video = "test.mp4"
+    now = datetime.now()
+    fourcc = cv2.VideoWriter.fourcc('M', 'P', '4', 'V')  # 文件扩展名.mp4
+    #source_face = {"face_type": "source", "face_data": frame_2_base64(cv2.imread(os.path.join(base_dir, source_face)))}
+    #target_face = {"face_type": "target", "face_data": frame_2_base64(cv2.imread(os.path.join(base_dir, target_face)))}
+    cap = cv2.VideoCapture(os.path.join(base_dir,raw_video))
+    _out = cv2.VideoWriter(os.path.join(base_dir,'convert_{}.mp4'.format(str(now).replace(":", ''))), fourcc, cap.get(cv2.CAP_PROP_FPS),
+                           (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
+
+    from app.services.swap_face_service import Swap
+    swap = Swap()
+    swap.set_source_face(cv2.imread(os.path.join(base_dir,source_face)))
+    swap.set_target_face(cv2.imread(os.path.join(base_dir,target_face)))
+    frame_index = 0
+    while cap.isOpened():
+        print(frame_index)
+        frame_index += 1
+        success, input_frame = cap.read()
+        if not success:
+            break
+        if success:
+            convert_frame = await swap.swap_face(swap.source_face, swap.target_face, input_frame)
+            _out.write(binary_2_frame(convert_frame))
+    _out.release()
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    asyncio.run(call_websocket())
+    #asyncio.run(convert_video_video())
+    asyncio.run(convert_video_video_local())
