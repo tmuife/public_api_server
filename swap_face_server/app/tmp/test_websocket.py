@@ -67,7 +67,7 @@ async def call_websocket():
     #remote_call({"content": frame_2_base64(cv2.imread(os.path.join(base_dir,target_face)))},
     #                 config("set_target_face_url"), token)
 
-    uri = f"ws://127.0.0.1:8000/ws?access_token={token}"
+    uri = f"ws://140.238.3.222:7860/ws?access_token={token}"
     frame = None
     async with websockets.connect(uri) as websocket:
         #for i in range(5):
@@ -87,7 +87,7 @@ async def call_websocket():
         await websocket.send(json.dumps(target_face))
         response = await websocket.recv()
         print(response)
-        for i in range(0,10):
+        for i in range(0,100):
             binary_data = frame_2_binary(cv2.imread(os.path.join(base_dir,test_image)))
             await websocket.send(binary_data)
             response = await websocket.recv()
