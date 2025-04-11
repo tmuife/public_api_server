@@ -1,6 +1,6 @@
 import asyncio
 import os.path
-
+from datetime import datetime
 import websockets
 from decouple import config
 import json, io
@@ -87,12 +87,14 @@ async def call_websocket():
         await websocket.send(json.dumps(target_face))
         response = await websocket.recv()
         print(response)
-        for i in range(0,100):
+
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        for i in range(0,500):
             binary_data = frame_2_binary(cv2.imread(os.path.join(base_dir,test_image)))
             await websocket.send(binary_data)
             response = await websocket.recv()
             print(i)
-
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         # 2. Show image in a window
         cv2.imshow("My Image", binary_2_frame(response))
         # 3. Wait for a key press (0 = wait forever)

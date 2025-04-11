@@ -67,7 +67,7 @@ async def websocket_endpoint(websocket: WebSocket, access_token: str = Query(...
             # 判断消息类型
             if data["type"] == "websocket.receive":
                 if "text" in data:
-                    print("收到文本：", data["text"])
+                    #print("收到文本：", data["text"])
                     jobj = json.loads(data["text"])
                     if jobj["face_type"] == "source":
                         swap.set_source_face(image_or_path=swap.base64_2_frame(jobj["face_data"]))
@@ -78,7 +78,7 @@ async def websocket_endpoint(websocket: WebSocket, access_token: str = Query(...
                     else:
                         pass
                 elif "bytes" in data:
-                    print("收到二进制数据：", data["bytes"])
+                    #print("收到二进制数据：", data["bytes"])
                     binary_data=data["bytes"]
                     #binary_data = await websocket.receive_bytes()
                     frame = await swap.swap_face(swap.source_face, swap.target_face, cv2.imdecode(np.frombuffer(binary_data, np.uint8), cv2.IMREAD_COLOR))
