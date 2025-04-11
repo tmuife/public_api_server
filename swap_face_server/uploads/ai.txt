@@ -1,0 +1,470 @@
+1. What does the term "hallucination" refer to in the context of Language Large Models (LLMs)?
+
+The model's ability to generate imaginative and creative content
+The process by which the model visualizes and describes images in detail
+The phenomenon where the model generates factually incorrect information or unrelated content as if it were true
+A technique used to enhance the model's performance on specific tasks
+
+
+
+2. What is the role of temperature in the decoding process of a Large Language Model (LLM)?
+
+To determine the number of words to generate in a single decoding step
+To decide to which part of speech the next word should belong
+To adjust the sharpness of probability distribution over vocabulary when selecting the next word
+To increase the accuracy of the most likely word in the vocabulary
+
+
+
+3. What does in-context learning in Large Language Models involve?
+
+Training the model using reinforcement learning
+Pretraining the model on a specific domain
+Conditioning the model with task-specific instructions or demonstrations
+Adding more layers to the model
+
+
+
+4. What is prompt engineering in the context of Large Language Models (LLMs)?
+
+Training the model on a large data set
+Adjusting the hyperparameters of the model
+Adding more layers to the neural network
+Iteratively refining the ask to elicit a desired response
+
+
+5. Which statement accurately reflects the differences between these approaches in terms of the number of parameters modified and the type of data used?
+
+Fine-tuning modifies all parameters using labeled, task-specific data, whereas Parameter Efficient Fine-Tuning updates a few, new parameters also with labeled, task-specific data.
+Soft prompting and continuous pretraining are both methods that require no modification to the original parameters of the model.
+Fine-tuning and continuous pretraining both modify all parameters and use labeled, task-specific data.
+Parameter Efficient Fine Tuning and Soft prompting modify all parameters of the model using unlabeled data.
+
+
+
+1. What is the main advantage of using few-shot model prompting to customize a Large Language Model (LLM)?
+
+It significantly reduces the latency for each model request.
+It allows the LLM to access a larger data set.
+It provides examples in the prompt to guide the LLM to better performance with no training cost.
+It eliminates the need for any training or computational resources.
+
+
+
+2. What is the purpose of frequency penalties in language model outputs?
+
+To randomly penalize some tokens to increase the diversity of the text
+To reward the tokens that have never appeared in the text
+To ensure that tokens that appear frequently are used more often
+To penalize tokens that have already appeared, based on the number of times they have been used
+
+
+3. What happens if a period (.) is used as a stop sequence in text generation?
+
+The model stops generating text after it reaches the end of the first sentence, even if the token limit is much higher.
+The model stops generating text after it reaches the end of the current paragraph.
+The model ignores periods and continues generating text until it reaches the token limit.
+The model generates additional sentences to complete the paragraph.
+
+4. What is the purpose of embeddings in natural language processing?
+
+To create numerical representations of text that capture the meaning and relationships between words or phrases
+To translate text into a different language
+To compress text data into smaller files for storage
+To increase the complexity and size of text data
+
+
+
+5. Which is a distinctive feature of GPUs in Dedicated AI Clusters used for generative AI tasks?
+
+The GPUs allocated for a customer’s generative AI tasks are isolated from other GPUs.
+Each customer's GPUs are connected via a public Internet network for ease of access.
+GPUs are shared with other customers to maximize resource utilization.
+GPUs are used exclusively for storing large data sets, not for computation.
+
+
+
+1. What differentiates Semantic search from traditional keyword search?
+
+It is based on the date and author of the content.
+It involves understanding the intent and context of the search.
+It relies solely on matching exact keywords in the content.
+It depends on the number of times keywords appear in the content.
+
+
+
+2. Which is a key characteristic of Large Language Models (LLMs) without Retrieval Augmented Generation (RAG)?
+
+They use vector databases exclusively to produce answers.
+They rely on internal knowledge learned during pretraining on a large text corpus.
+They cannot generate responses without fine-tuning.
+They always use an external database for generating responses.
+
+
+
+3. What is the function of the Generator in a text generation system?
+
+To rank the information based on its relevance to the user's query
+To collect user queries and convert them into database search terms
+To generate human-like text using the information retrieved and ranked, along with the user's original query
+To store the generated responses for future use
+
+
+
+4. What do embeddings in Large Language Models (LLMs) represent?
+
+The semantic content of data in high-dimensional vectors
+The grammatical structure of sentences in the data
+The color and size of the font in textual data
+The frequency of each word or pixel in the data
+
+
+
+5. What does the Ranker do in a text generation system?
+
+It generates the final text based on the user's query.
+It evaluates and prioritizes the information retrieved by the Retriever.
+It sources information from databases to use in text generation.
+It interacts with the user to understand the query better.
+
+
+
+1. How are prompt templates typically designed for language models?
+
+To be used without any modification or customization
+As predefined recipes that guide the generation of language model prompts
+To work only with numerical data instead of textual content
+As complex algorithms that require manual compilation
+
+
+
+2. How are chains traditionally created in LangChain?
+
+Declaratively, with no coding required
+Exclusively through third-party software integrations
+By using machine learning algorithms
+Using Python classes, such as LLM Chain and others
+
+
+3. What is the function of "Prompts" in the chatbot system?
+
+They handle the chatbot's memory and recall abilities.
+They are responsible for the underlying mechanics of the chatbot.
+They are used to initiate and guide the chatbot's responses.
+They store the chatbot's linguistic knowledge.
+
+
+
+4. What is LECL in the context of LangChain Chains?
+
+An older Python library for building Large Language Models
+A programming language used to write documentation for LangChain
+A declarative way to compose chains together using LangChain Expression Language
+A legacy method for creating chains in LangChain
+
+
+
+5. What is the purpose of memory in the LangChain framework?
+
+To act as a static database for storing permanent records
+To retrieve user input and provide real-time output only
+To perform complex calculations unrelated to user interaction
+To store various types of data and provide algorithms for summarizing past interactions
+
+1.How does the temperature setting in a decoding algorithm influence the probability distribution over the vocabulary?
+
+Increasing temperature removes the impact of the most likely word
+Decreasing temperature broadens the distribution, making less likely words more prebable
+Increasing temperature flattens the distribution, allowing for more varied word choices.
+Temperature has no effect on the probability distribution; it only changes the speed of decoding.
+
+
+
+2.In which scenario is soft prompting especially appropriate compared to other training styles?
+
+When there is a significant amount of labeled, task-specific data available
+When the model needs to be adapted to perform well in a different domain it was not originally trained on.
+When there is a need to add learnable parameters to large language model(LLM) without task-specific training.
+When the model requires contunued pre-training on unlabeled data.
+
+
+
+3.An LLM emits intermediate reasoning steps as part of its responses. Which of the following techniques is being utilized?
+
+In context Learning
+Step Back Prompting
+Least-to-most Prompting
+Chain-of-Thought
+
+
+4.How does a presence penalty function in language model generation when using OCI Generative AI service?
+
+It penalizes all tokens equally, regardless of how often they have appeared.
+It only penalizes tokens that have never appeared in the text before.
+It applies a penalty only if the token has appeared more than twice.
+It penalizes a token each time it appears after the first occurrence.
+
+
+5. What is the characteristic of T-Few fine-tuning for Large Language Models(LLMs)?
+
+It updates all the weights of the model uniformly
+It selectively updates only a fraction of weights to reduce the no. of parameters.
+It selectively updates only a fraction of weights to reduce computational load and avoid overfitting
+It increases the trainging time as compared to Vanilla fine-tuning
+
+
+
+6. You create a fine-tuning dedicated AI cluster to customize a foundational model with your custom training data. How Many minimum unit hours commitment is required for fine-tuning of the cluster would be active for 10 days?
+
+20 unit hours
+240 unit hours
+744 unit hours
+480 unit hours
+
+
+7. An Ai development company is working on an AI assisted chatbot for a customer which happens to be an online retail company. The goal is to create an assistant that can best answer queries regarding the company polices as well as retain the chat history throughout a session. Considering the capabilities, which type of model would be the best?
+
+A keyword search based AI that responds based on specific keywords identified in customer queries.
+An LLM enhanced with Retrieval-Augmented Generation(RAG) for dynamic information retrieval and response generation.
+An LLM dedicated to generating text responses without external data integration
+A pre trained LLM model from Cohere or OpenAI.
+
+
+
+8. How does the structure of vector databases differ from traditional relational databases?
+
+It stores data in a linear or tabular format
+It is not optimized for high dimonsional spaces
+It users simple row based data storage
+It is based on distances and similarities in a vector space.
+
+
+9. When does a chain typically interact with memory in a run within the LangChain framework?
+
+Only after the output has been generated
+Before user input and after chain execution
+After user input but before chain execution, and again after core logic but before output.
+Continuously throughout the entire chain execution process.
+
+
+
+
+
+
+
+1. How does the structure of vector databases differ from traditional relational databases?
+
+It is based on distances and similarities in a vector space.
+It uses simple row-based data storage.
+It is not optimized for high-dimensional spaces.
+A vector database stores data in a linear or tabular format.
+
+
+
+2. When is fine-tuning an appropriate method for customizing a Large Language Model (LLM)?
+
+When the LLM already understands the topics necessary for text generation
+When you want to optimize the model without any instructions
+When the LLM requires access to the latest data for generating outputs
+When the LLM does not perform well on a task and the data for prompt engineering is too large
+
+
+3. What does accuracy measure in the context of fine-tuning results for a generative model?
+
+The number of predictions a model makes, regardless of whether they are correct or incorrect
+How many predictions the model made correctly out of all the predictions in an evaluation
+The proportion of incorrect predictions made by the model during an evaluation
+The depth of the neural network layers used in the model
+
+
+
+4. What is LangChain?
+
+A Python library for building applications with Large Language Models
+A Java library for text summarization
+A JavaScript library for natural language processing
+A Ruby library for text generation
+
+
+
+5. Why is it challenging to apply diffusion models to text generation?
+
+Because diffusion models can only produce images
+Because text representation is categorical unlike images
+Because text generation does not require complex models
+Because text is not categorical
+
+
+
+6. What does the Loss metric indicate about a model's predictions?
+
+Loss measures the total number of predictions made by a model.
+Loss describes the accuracy of the right predictions rather than the incorrect ones.
+Loss is a measure that indicates how wrong the model's predictions are.
+Loss indicates how good a prediction is, and it should increase as the model improves.
+
+
+
+7. How does a presence penalty function in language model generation?
+
+It penalizes all tokens equally, regardless of how often they have appeared.
+It penalizes only tokens that have never appeared in the text before.
+It applies a penalty only if the token has appeared more than twice.
+It penalizes a token each time it appears after the first occurrence.
+
+
+8. In the context of generating text with a Large Language Model (LLM), what does the process of greedy decoding entail?
+
+Using a weighted random selection based on a modulated distribution
+Selecting a random word from the entire vocabulary at each step
+Choosing the word with the highest probability at each step of decoding
+Picking a word based on its position in a sentence structure
+
+
+
+9. What does a cosine distance of 0 indicate about the relationship between two embeddings?
+
+They are unrelated
+They have the same magnitude
+They are similar in direction
+They are completely dissimilar
+
+
+
+10. What do prompt templates use for templating in language model applications?
+
+Python's str.format syntax
+Python's lambda functions
+Python's class and object structures
+Python's list comprehension syntax
+
+
+
+11. In which scenario is soft prompting appropriate compared to other training styles?
+
+When there is a significant amount of labeled, task-specific data available
+When the model needs to be adapted to perform well in a domain on which it was not originally trained
+When there is a need to add learnable parameters to a Large Language Model (LLM) without task-specific training
+When the model requires continued pretraining on unlabeled data
+
+
+
+12. Given the following code block: history = StreamlitChatMessageHistory(key="chat_messages") memory = ConversationBufferMemory(chat_memory=history) Which statement is NOT true about StreamlitChatMessageHistory?
+
+StreamlitChatMessageHistory can be used in any type of LLM application.
+StreamlitChatMessageHistory will store messages in Streamlit session state at the specified key.
+A given StreamlitChatMessageHistory will not be shared across user sessions.
+A given StreamlitChatMessageHistory will NOT be persisted.
+
+
+
+13. Which LangChain component is responsible for generating the linguistic output in a chatbot system?
+
+LLMs
+Vector Stores
+LangChain Application
+Document Loaders
+
+
+
+14. Which statement is true about Fine-tuning and Parameter-Efficient Fine-Tuning (PEFT)?
+
+Fine-tuning and PEFT do not involve model modification; they differ only in the type of data used for training, with Fine-tuning requiring labeled data and PEFT using unlabeled data.
+PEFT requires replacing the entire model architecture with a new one designed specifically for the new task, making it significantly more data-intensive than Fine-tuning.
+Fine-tuning requires training the entire model on new data, often leading to substantial computational costs, whereas PEFT involves updating only a small subset of parameters, minimizing computational requirements and data needs.
+Both Fine-tuning and PEFT require the model to be trained from scratch on new data, making them equally data and computationally intensive.
+
+
+
+15. Which is a characteristic of T-Few fine-tuning for Large Language Models (LLMs)?
+
+It does not update any weights but restructures the model architecture.
+It updates all the weights of the model uniformly.
+It selectively updates only a fraction of the model's weights.
+It increases the training time as compared to Vanilla fine-tuning.
+
+
+
+16. How are documents usually evaluated in the simplest form of keyword-based search?
+
+Based on the presence and frequency of the user-provided keywords
+By the complexity of language used in the documents
+Based on the number of images and videos contained in the documents
+According to the length of the documents
+
+
+
+17. Which statement is true about string prompt templates and their capability regarding variables?
+
+They can only support a single variable at a time.
+They require a minimum of two variables to function properly.
+They support any number of variables, including the possibility of having none.
+They are unable to use any variables.
+
+
+
+18. What is the purpose of Retrieval Augmented Generation (RAG) in text generation?
+
+To store text in an external database without using it for generation
+To retrieve text from an external source and present it without any modifications
+To generate text based only on the model's internal knowledge without external data
+To generate text using extra information obtained from an external data source
+
+
+19. Accuracy in vector databases contributes to the effectiveness of Large Language Models (LLMs) by preserving a specific type of relationship. What is the nature of these relationships, and why are they crucial for language models?
+
+Hierarchical relationships; important for structuring database queries
+Temporal relationships; necessary for predicting future linguistic trends
+Linear relationships; they simplify the modeling process
+Semantic relationships; crucial for understanding context and generating precise language
+
+
+20. How can the concept of "Groundedness" differ from "Answer Relevance" in the context of Retrieval Augmented Generation (RAG)?
+
+Groundedness measures relevance to the user query, whereas Answer Relevance evaluates data integrity.
+Groundedness refers to contextual alignment, whereas Answer Relevance deals with syntactic accuracy.
+Groundedness focuses on data integrity, whereas Answer Relevance emphasizes lexical diversity.
+Groundedness pertains to factual correctness, whereas Answer Relevance concerns query relevance.
+
+
+21. In the simplified workflow for managing and querying vector data, what is the role of indexing?
+
+To categorize vectors based on their originating data type (text, images, audio)
+To compress vector data for minimized storage usage
+To map vectors to a data structure for faster searching, enabling efficient retrieval
+To convert vectors into a nonindexed format for easier retrieval
+
+
+
+22. How does the temperature setting in a decoding algorithm influence the probability distribution over the vocabulary?
+
+Temperature has no effect on probability distribution; it only changes the speed of decoding.
+Increasing the temperature removes the impact of the most likely word.
+Decreasing the temperature broadens the distribution, making less likely words more probable.
+Increasing the temperature flattens the distribution, allowing for more varied word choices.
+
+
+23. When does a chain typically interact with memory in a run within the LangChain framework?
+
+Continuously throughout the entire chain execution process
+Before user input and after chain execution
+Only after the output has been generated
+After user input but before chain execution, and again after core logic but before output
+
+
+24. What is the purpose of Retrievers in LangChain?
+
+To combine multiple components into a single pipeline
+To retrieve relevant information from knowledge bases
+To train Large Language Models
+To break down complex tasks into smaller steps
+
+
+
+25. What does the RAG Sequence model do in the context of generating a response?
+
+For each input query, it retrieves a set of relevant documents and considers them together to generate a cohesive response.
+It modifies the input query before retrieving relevant documents to ensure a diverse response.
+It retrieves a single relevant document for the entire input query and generates a response based on that alone.
+It retrieves relevant documents only for the initial part of the query and ignores the rest.
+

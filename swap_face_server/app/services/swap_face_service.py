@@ -29,6 +29,8 @@ execution_providers: List[str] = [config("execution_providers")]
 detect_method=config("detect_method")
 
 class Swap:
+    source_face = None
+    target_face = None
     def __init__(self):
         abs_dir = os.path.abspath(__file__)
         self._models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(abs_dir))), 'models')
@@ -55,8 +57,8 @@ class Swap:
         #self._face_enhancer = gfpgan.GFPGANer(model_path=self._enhance_model_path, upscale=1)  # type: ignore[attr-defined]
         self._face_analyser = insightface.app.FaceAnalysis(name='buffalo_l', providers=execution_providers)
         self._face_analyser.prepare(ctx_id=0, det_size=(640, 640))
-        self.source_face = None
-        self.target_face = None
+        #self.source_face = None
+        #self.target_face = None
 
 
     @staticmethod
@@ -119,7 +121,7 @@ class Swap:
                 image = image_or_path
             faces = self.get_face(image)
             if len(faces)>0:
-                self.target_face = faces[0]
+                self.target_face = faces
 
     def get_oneface(self, frame: Frame) -> Any:
         face = self._face_analyser.get(frame)
@@ -172,20 +174,27 @@ class Swap:
         return swapped_frame
 
     # just swap single face
-    def swap_face(self, source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
+    async def swap_face(self, source_face: [Face| None], target_face: [Face| None], temp_frame: Frame) -> Frame:
         if self.source_face is None or self.target_face is None:
             print("Please set source and target face first!")
             exit(-1)
         _faces = self.get_face(temp_frame)
         for _face in _faces:
             _embedding = _face.normed_embedding
-            distance = self.euclidean_distance(_embedding, self.target_face.normed_embedding)
-            print(distance)
-            if distance < 0.9:
-                swapped_frame = self._face_swapper.get(
-                    temp_frame, _face, source_face, paste_back=True
-                )
-                return swapped_frame
+            for temp_target_face in self.target_face:
+                distance = self.euclidean_distance(_embedding, temp_target_face.normed_embedding)
+                print(distance,config("distance"))
+                try:
+                    if distance < float(config("distance")):
+                        swapped_frame = self._face_swapper.get(
+                            temp_frame, _face, self.source_face, paste_back=True
+                        )
+                        if swapped_frame is None:
+                            print("what?")
+                        return swapped_frame
+                except Exception as e:
+                    print(e)
+                    return temp_frame
         return temp_frame
 
 #    def enhance_face(self, temp_frame: Frame) -> Frame:
