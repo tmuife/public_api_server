@@ -24,4 +24,4 @@ RUN uv sync -v && uv pip list
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl -f http://localhost:8000/docs || exit 1
 
-CMD ["uv", "pip", "run", "python", "main.py"]
+CMD [".venv/bin/python", "main.py"]
