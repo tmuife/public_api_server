@@ -1,25 +1,25 @@
 version: '3.9'
 services:
-  swap_face_service:
+  owl_vit_service:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    container_name: public_swap_face_api
+    container_name: public_owl_vit_api
     restart: always
     ports:
       - 8000:8000
     networks:
-      - default
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+      - owl_vit
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          count: 1
+    #          capabilities: [gpu]
               
 networks:
-  default:
+  owl_vit:
     driver: bridge
 
 volumes:
