@@ -4,7 +4,6 @@ WORKDIR /code
 
 COPY ./uv.lock /code/uv.lock
 COPY ./pyproject.toml /code/pyproject.toml
-COPY ./poetry.toml /code/poetry.toml
 COPY ./.env /code/.env
 COPY ./main.py /code/main.py
 COPY ./app /code/app
