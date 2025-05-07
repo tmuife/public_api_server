@@ -2,7 +2,7 @@ FROM cnstark/pytorch:2.0.1-py3.10.11-cuda11.8.0-ubuntu22.04
 
 WORKDIR /code
 
-COPY ./poetry.lock /code/poetry.lock
+COPY ./uv.lock /code/uv.lock
 COPY ./pyproject.toml /code/pyproject.toml
 COPY ./poetry.toml /code/poetry.toml
 COPY ./.env /code/.env
