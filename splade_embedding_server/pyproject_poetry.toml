@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "public_api_server"
+version = "0.1.0"
+description = "Embedding server"
+authors = ["Walter Jin <jinshuhaicc@gmail.com>"]
+license = "MIT License"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.4"
+numpy = "^1.23.0"
+uvicorn = "^0.32.0"
+pydantic = "^2.9.2"
+jinja2 = "^3.1.4"
+pillow = "^11.0.0"
+imutils = "^0.5.4"
+asyncio = "^3.4.3"
+pyyaml = "^6.0.2"
+setuptools = "^75.5.0"
+python-decouple = "^3.8"
+onnxruntime = "^1.20.1"
+torch = "^2.5.1"
+transformers = "^4.48.0"
+omegaconf = "^2.3.0"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

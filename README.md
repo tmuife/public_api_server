@@ -85,12 +85,19 @@ Additional service-specific variables:
 - `ffmpeg` available on host (used by multiple services)
 - Model files present when required (`models/`, `gfpgan/` for some services)
 
-Python version guidance from service configs:
+Python versions and major dependency packages by service (from each `pyproject.toml`):
 
-- Python `^3.12`: `Florence2_server`, `embedding_server`, `splade_embedding_server`
-- Python `>=3.10,<3.11`: `enhance_face_server`, `swap_face_server`
-- Python `^3.10`: `minicpm_server`
-- Python `>=3.10`: `owl_vit_server`
+| Service | Python Version | Major Dependencies |
+|---|---|---|
+| `Florence2_server` | `^3.12` | `fastapi`, `uvicorn`, `pydantic`, `transformers`, `timm`, `einops`, `pandas`, `numpy`, `pillow` |
+| `embedding_server` | `^3.12` | `fastapi`, `uvicorn`, `pydantic`, `paddleocr`, `paddlepaddle`, `flagembedding`, `clip`, `insightface`, `onnxruntime`, `opencv-python` |
+| `enhance_face_server` | `>=3.10,<3.11` | `fastapi`, `uvicorn`, `pydantic`, `torch`, `torchvision`, `insightface`, `onnx`, `onnxruntime-gpu` (linux), `gfpgan`, `opencv-python` |
+| `minicpm_server` | `^3.10` | `fastapi`, `uvicorn`, `pydantic`, `torch`, `torchvision`, `torchaudio`, `transformers`, `librosa`, `decord`, `onnxruntime`, `moviepy` |
+| `owl_vit_server` | `>=3.10` | `fastapi`, `uvicorn`, `torch`, `transformers`, `pillow`, `requests`, `hf-xet` |
+| `splade_embedding_server` | `^3.12` | `fastapi`, `uvicorn`, `pydantic`, `torch`, `transformers`, `onnxruntime`, `omegaconf`, `numpy` |
+| `swap_face_server` | `>=3.10,<3.11` | `fastapi`, `uvicorn`, `pydantic`, `torch`, `torchvision`, `insightface`, `onnx`, `onnxruntime-gpu` (linux), `opencv-python`, `moviepy`, `websockets` |
+
+Note: the "Major Dependencies" column is a concise set of core runtime packages, not the full dependency list.
 
 ## Run One Service (Poetry-based)
 

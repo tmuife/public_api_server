@@ -2,9 +2,8 @@ FROM python:3.12
 
 WORKDIR /code
 
-COPY ./poetry.lock /code/poetry.lock
 COPY ./pyproject.toml /code/pyproject.toml
-COPY ./poetry.toml /code/poetry.toml
+COPY ./uv.lock /code/uv.lock
 COPY ./.env /code/.env
 COPY ./main.py /code/main.py
 COPY ./app /code/app
@@ -14,14 +13,12 @@ COPY ./certs/localhost.key /etc/ssl/certs/
 
 COPY ./models /code/models
 
-RUN apt-get update && apt-get install -y && apt-get install ffmpeg -y \
-    build-essential libsndfile1 \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg build-essential libsndfile1 curl \
     && rm -rf /var/lib/apt/lists/*
-RUN pip install poetry
-#RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-#RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-RUN poetry install --no-cache
+RUN pip install --no-cache-dir uv
+RUN uv sync --frozen --no-dev --no-install-project
 
 HEALTHCHECK --interval=30s --timeout=10s CMD curl -f http://localhost:8000/docs || exit 1
 
-CMD ["poetry", "run", "python", "main.py"]
+CMD [".venv/bin/python", "main.py"]

@@ -2,7 +2,7 @@ version: '3.9'
 services:
   owl_vit_service:
     build:
-      context: ../
+      context: ./
       dockerfile: docker/Dockerfile
     container_name: public_owl_vit_api
     restart: always
