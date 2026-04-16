@@ -2,7 +2,7 @@ version: '3.9'
 services:
   enhance_face_service:
     build:
-      context: ../
+      context: ./
       dockerfile: docker/Dockerfile
     container_name: public_enhance_face_api
     restart: always
@@ -10,13 +10,13 @@ services:
       - 8000:8000
     networks:
       - default
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          count: 1
+    #          capabilities: [gpu]
               
 networks:
   default:
