@@ -2,7 +2,7 @@ version: '3.9'
 services:
   florence_service:
     build:
-      context: ../
+      context: ./
       dockerfile: docker/Dockerfile
     container_name: public_florence_api
     restart: always

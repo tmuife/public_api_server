@@ -1,6 +1,7 @@
 import requests
 import os,json,base64,platform
 from io import BytesIO
+import logging
 from click import prompt
 from fastapi import APIRouter, Depends, Form
 from pydantic import BaseModel
@@ -17,8 +18,25 @@ class Item(BaseModel):
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
-model = AutoModelForCausalLM.from_pretrained("microsoft/Florence-2-large", torch_dtype=torch_dtype, trust_remote_code=True).to(device)
+model_kwargs = {
+    "trust_remote_code": True,
+    "attn_implementation": "eager",
+}
+try:
+    model = AutoModelForCausalLM.from_pretrained(
+        "microsoft/Florence-2-large",
+        dtype=torch_dtype,
+        **model_kwargs,
+    ).to(device)
+except TypeError:
+    # Backward compatibility for older transformers that only accept torch_dtype.
+    model = AutoModelForCausalLM.from_pretrained(
+        "microsoft/Florence-2-large",
+        torch_dtype=torch_dtype,
+        **model_kwargs,
+    ).to(device)
 processor = AutoProcessor.from_pretrained("microsoft/Florence-2-large", trust_remote_code=True)
+logger = logging.getLogger(__name__)
 
 
 def jsonMsg(status, data, error):
@@ -40,6 +58,34 @@ def base64ToImage(base64_string,type = 'RGB'):
     else:
         return image
 
+
+def _generate_with_fallback(input_ids, pixel_values):
+    generate_kwargs = {
+        "input_ids": input_ids,
+        "pixel_values": pixel_values,
+        "max_new_tokens": 1024,
+        "do_sample": False,
+    }
+    try:
+        return model.generate(
+            **generate_kwargs,
+            num_beams=3,
+        )
+    except AttributeError as exc:
+        # Florence-2 remote code can fail in beam-search cache preparation with some
+        # transformers/torch combinations. Fallback to greedy + no KV cache.
+        if "NoneType" in str(exc) and "shape" in str(exc):
+            logger.warning(
+                "Florence beam-search cache issue detected, fallback to greedy decode: %s",
+                exc,
+            )
+            return model.generate(
+                **generate_kwargs,
+                num_beams=1,
+                use_cache=False,
+            )
+        raise
+
 router = APIRouter(
     prefix="/florence",
     tags=["SECURE"],
@@ -53,13 +99,13 @@ def image_process(item:Item):
     #url = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/car.jpg?download=true"
     #image = Image.open(requests.get(url, stream=True).raw)
     image = base64ToImage(item.content)
-    inputs = processor(text=prompt, images=image, return_tensors="pt").to(device, torch_dtype)
-    generated_ids = model.generate(
-        input_ids=inputs["input_ids"],
-        pixel_values=inputs["pixel_values"],
-        max_new_tokens=1024,
-        num_beams=3,
-        do_sample=False
+    inputs = processor(text=prompt, images=image, return_tensors="pt")
+    input_ids = inputs["input_ids"].to(device)
+    pixel_values = inputs["pixel_values"].to(device=device, dtype=torch_dtype)
+
+    generated_ids = _generate_with_fallback(
+        input_ids=input_ids,
+        pixel_values=pixel_values,
     )
     generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
 
