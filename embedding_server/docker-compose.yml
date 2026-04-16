@@ -2,7 +2,7 @@ version: '3.9'
 services:
   bge_service:
     build:
-      context: ../
+      context: ./
       dockerfile: docker/Dockerfile
     container_name: public_embedding_api
     restart: always

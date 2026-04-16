@@ -1,3 +1,8 @@
+import transformers.utils.import_utils as hf_import_utils
+
+if not hasattr(hf_import_utils, "is_torch_fx_available"):
+    hf_import_utils.is_torch_fx_available = lambda: False
+
 from FlagEmbedding import BGEM3FlagModel
 from typing import List, Tuple, Union, cast
 import asyncio
@@ -126,7 +131,6 @@ class RequestProcessor:
             return await self.response_futures[request_id]
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Internal Server Error {e}")
-
 
 
 

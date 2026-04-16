@@ -23,7 +23,7 @@ def jsonMsg(status, data, error):
     if "success" == status:
         result["data"] = data
     else:
-        result["error"] = error
+        result["error"] = str(error) if error is not None else None
     return json.dumps(result)
 
 
@@ -52,7 +52,7 @@ def get_text_features(item:Item):
         embedding = clip_searcher.get_text_features(text=content)
         return jsonMsg("success",str(embedding[0].tolist()),None)
     except Exception as e:
-        return jsonMsg("fail",None,e)
+        return jsonMsg("fail",None,str(e))
 
 
 @router.post("/get_image_features")
@@ -62,4 +62,4 @@ def get_image_features(item:Item):
         embedding = clip_searcher.get_image_features(image=base64ToImage(content))
         return jsonMsg("success", embedding[0].tolist(), None)
     except Exception as e:
-        return jsonMsg("fail", None, e)
+        return jsonMsg("fail", None, str(e))
