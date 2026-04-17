@@ -8,8 +8,14 @@ services:
     restart: always
     ports:
       - 8000:8000
+    volumes:
+      - ./models:/code/models 
     networks:
       - default
+    environment:
+      APP_HOST: ${APP_HOST:-0.0.0.0}
+      APP_PORT: ${APP_PORT:-8000}
+      API_KEY: ${API_KEY}
 
 networks:
   default:
