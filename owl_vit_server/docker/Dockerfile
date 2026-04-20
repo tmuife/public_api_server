@@ -1,10 +1,10 @@
+# GPU variant (CUDA runtime base image)
 FROM cnstark/pytorch:2.0.1-py3.10.11-cuda11.8.0-ubuntu22.04
 
 WORKDIR /code
 
 COPY ./uv.lock /code/uv.lock
 COPY ./pyproject.toml /code/pyproject.toml
-COPY ./.env /code/.env
 COPY ./main.py /code/main.py
 COPY ./app /code/app
 
@@ -12,7 +12,7 @@ COPY ./certs/localhost.crt /etc/ssl/certs/
 COPY ./certs/localhost.key /etc/ssl/certs/
 
 
-RUN apt-get update && apt-get install -y && apt-get install ffmpeg -y \
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg curl \
     build-essential libsndfile1 \
     && rm -rf /var/lib/apt/lists/*
 #RUN pip install poetry

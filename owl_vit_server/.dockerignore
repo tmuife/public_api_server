@@ -1,0 +1,18 @@
+# Exclude everything by default to minimize build context transfer.
+*
+
+# Allow only files/directories required by docker/Dockerfile
+!uv.lock
+!pyproject.toml
+!main.py
+
+!app
+!app/**
+
+!certs
+!certs/localhost.crt
+!certs/localhost.key
+
+!docker
+!docker/Dockerfile
+!docker/Dockerfile.cpu
