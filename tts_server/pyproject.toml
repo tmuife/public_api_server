@@ -1,0 +1,17 @@
+[project]
+name = "tts-server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.136.0",
+    "httpx>=0.28.0",
+    "numpy>=2.3.0",
+    "onnxruntime>=1.22.0",
+    "python-decouple>=3.8",
+    "sentencepiece>=0.2.0",
+    "soundfile>=0.13.1",
+    "soxr>=1.0.0",
+    "uvicorn>=0.45.0",
+]

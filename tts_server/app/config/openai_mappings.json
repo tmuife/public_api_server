@@ -1,0 +1,16 @@
+{
+  "models": {
+    "tts-1": "moss-tts-nano-onnx",
+    "tts-1-hd": "moss-tts-nano-onnx",
+    "moss-tts-nano": "moss-tts-nano-onnx",
+    "moss-tts-nano-onnx": "moss-tts-nano-onnx"
+  },
+  "voices": {
+    "alloy": "Adam",
+    "echo": "Bella",
+    "fable": "Yuewen",
+    "onyx": "Adam",
+    "nova": "Ava",
+    "shimmer": "Lingyu"
+  }
+}

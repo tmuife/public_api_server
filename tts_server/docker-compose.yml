@@ -1,0 +1,17 @@
+services:
+  tts-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tts-server
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8000
+      ONNX_MODEL_DIR: /app/models
+    volumes:
+      - ./models:/app/models
+    restart: unless-stopped
