@@ -222,3 +222,4 @@ cython_debug/
 /**/config.ini
 /**/.python-version
 tts_server/models
+media_client/work

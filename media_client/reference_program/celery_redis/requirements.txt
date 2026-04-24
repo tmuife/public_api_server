@@ -1,0 +1,48 @@
+# requirements.txt
+celery[redis]==5.3.6
+redis==5.0.1
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+pillow==10.3.0
+cryptography==42.0.7
+
+# ─────────────────────────────────────────────
+# 启动命令（README）
+# ─────────────────────────────────────────────
+#
+# 1. 启动 Redis（Docker 最简单）
+#    docker run -d -p 6379:6379 redis:7-alpine
+#
+# 2. 启动 Celery Worker
+#    celery -A celery_app worker \
+#      --loglevel=info \
+#      --concurrency=8 \        ← 根据 CPU 核数 / GPU 数量调整
+#      --pool=prefork           ← CPU密集型用 prefork（多进程）
+#                               ← IO密集型可改 --pool=gevent
+#
+# 3. 启动 Flower（可选，Celery 可视化监控）
+#    celery -A celery_app flower --port=5555
+#    浏览器访问 http://localhost:5555
+#
+# 4. 启动 FastAPI
+#    uvicorn api:app --reload --port=8000
+#
+# 5. 提交视频（示例）
+#    curl -X POST http://localhost:8000/videos/submit \
+#         -F "file=@/path/to/video.mp4"
+#
+# 6. 查询进度
+#    curl http://localhost:8000/videos/{video_id}/progress
+#
+# 7. 下载结果
+#    curl -O http://localhost:8000/videos/{video_id}/download
+#
+# ─────────────────────────────────────────────
+# 环境变量
+# ─────────────────────────────────────────────
+# REDIS_URL=redis://localhost:6379/0
+# REDIS_RESULT_URL=redis://localhost:6379/1
+# AES_KEY=<64个hex字符，即32字节密钥>
+#
+# 生成密钥：
+#   python -c "import os; print(os.urandom(32).hex())"
