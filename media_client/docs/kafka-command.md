@@ -19,3 +19,8 @@ docker exec -it kafka kafka-topics \
 docker exec -it kafka kafka-topics \
   --bootstrap-server localhost:9092 \
   --delete --topic test-topic
+
+
+docker exec -it kafka kafka-get-offsets \
+  --bootstrap-server localhost:9092 \
+  --topic job_1777029959146_68gx4mn9_output

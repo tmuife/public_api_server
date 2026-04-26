@@ -223,3 +223,4 @@ cython_debug/
 /**/.python-version
 tts_server/models
 media_client/work
+/**/secrets
