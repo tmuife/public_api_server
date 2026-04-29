@@ -1,0 +1,90 @@
+{
+  "input_file": "/home/ubuntu/project/public_api_server/tts_server/docs/podcast.md",
+  "request_url": "http://127.0.0.1:8000/v1/audio/speech",
+  "total_segments": 5,
+  "success_count": 5,
+  "failure_count": 0,
+  "rows": [
+    {
+      "index": 1,
+      "label": "慢速",
+      "source_line": 1,
+      "text": "He abandoned the project because it was too difficult.",
+      "payload": {
+        "model": "tts-1",
+        "input": "He abandoned the project because it was too difficult.",
+        "voice": "alloy",
+        "response_format": "wav",
+        "stream": false
+      },
+      "output_file": "/home/ubuntu/project/public_api_server/tts_server/outputs/podcast_audio/podcast_001_slow.wav",
+      "status": "success",
+      "byte_length": 94764
+    },
+    {
+      "index": 2,
+      "label": "正常",
+      "source_line": 4,
+      "text": "He abandoned the project because it was too difficult.",
+      "payload": {
+        "model": "tts-1",
+        "input": "He abandoned the project because it was too difficult.",
+        "voice": "nova",
+        "response_format": "wav",
+        "stream": false
+      },
+      "output_file": "/home/ubuntu/project/public_api_server/tts_server/outputs/podcast_audio/podcast_002_normal.wav",
+      "status": "success",
+      "byte_length": 107564
+    },
+    {
+      "index": 3,
+      "label": "中文",
+      "source_line": 7,
+      "text": "他因为太难而放弃了这个项目。",
+      "payload": {
+        "model": "tts-1",
+        "input": "他因为太难而放弃了这个项目。",
+        "voice": "shimmer",
+        "response_format": "wav",
+        "stream": false
+      },
+      "output_file": "/home/ubuntu/project/public_api_server/tts_server/outputs/podcast_audio/podcast_003_zh.wav",
+      "status": "success",
+      "byte_length": 76844
+    },
+    {
+      "index": 4,
+      "label": "讲解",
+      "source_line": 10,
+      "text": "abandon，放弃",
+      "payload": {
+        "model": "tts-1",
+        "input": "abandon，放弃",
+        "voice": "echo",
+        "response_format": "wav",
+        "stream": false,
+        "reference_audio_path": "/home/ubuntu/project/public_api_server/tts_server/assets/audio/en_3.wav"
+      },
+      "output_file": "/home/ubuntu/project/public_api_server/tts_server/outputs/podcast_audio/podcast_004_explain.wav",
+      "status": "success",
+      "byte_length": 66604
+    },
+    {
+      "index": 5,
+      "label": "强化",
+      "source_line": 13,
+      "text": "He abandoned the project.",
+      "payload": {
+        "model": "tts-1",
+        "input": "He abandoned the project.",
+        "voice": "fable",
+        "response_format": "wav",
+        "stream": false
+      },
+      "output_file": "/home/ubuntu/project/public_api_server/tts_server/outputs/podcast_audio/podcast_005_reinforce.wav",
+      "status": "success",
+      "byte_length": 120364
+    }
+  ]
+}

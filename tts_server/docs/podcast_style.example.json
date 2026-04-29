@@ -1,0 +1,26 @@
+{
+  "default": {
+    "model": "tts-1",
+    "voice": "alloy",
+    "response_format": "wav",
+    "stream": false
+  },
+  "labels": {
+    "慢速": {
+      "voice": "alloy"
+    },
+    "正常": {
+      "voice": "nova"
+    },
+    "中文": {
+      "voice": "shimmer"
+    },
+    "讲解": {
+      "voice": "echo",
+      "reference_audio_path": "/home/ubuntu/project/public_api_server/tts_server/assets/audio/en_3.wav"
+    },
+    "强化": {
+      "voice": "fable"
+    }
+  }
+}

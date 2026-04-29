@@ -367,6 +367,32 @@ uv run python scripts/smoke_openai_sdk.py
 
 You can override smoke parameters with env vars such as `OPENAI_BASE_URL`, `OPENAI_API_KEY` (or `API_KEY`), `SMOKE_MODEL`, `SMOKE_TEXT`, `SMOKE_RESPONSE_FORMAT`, and `SMOKE_OUTPUT_FILE`.
 
+## Podcast Markdown Batch Generation
+
+Generate one audio file per bracket segment in `docs/podcast.md`:
+
+```bash
+uv run python scripts/generate_podcast_audio.py \
+  --input docs/podcast.md \
+  --output-dir outputs/podcast_audio \
+  --style-config docs/podcast_style.example.json
+```
+
+Useful flags:
+
+- `--dry-run`: parse markdown and build payload preview only
+- `--overwrite`: overwrite existing audio files
+- `--fail-fast`: stop on first failed segment
+- `--base-url`: change service address (default `http://127.0.0.1:8000`)
+
+Environment defaults:
+
+- `TTS_API_KEY` (fallback: `API_KEY`, `OPENAI_API_KEY`)
+- `TTS_BASE_URL`, `TTS_SPEECH_ENDPOINT`
+- `TTS_MODEL`, `TTS_DEFAULT_VOICE`, `TTS_RESPONSE_FORMAT`, `TTS_TIMEOUT`
+
+The script writes a manifest JSON into the output directory for traceability.
+
 ## Release Precheck (Required)
 
 Before delivery, all checks below must pass in order:
