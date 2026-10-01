@@ -1,0 +1,14 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+models/
+materials/
+faces/
+work/
+.media-tool-reports/
+*.egg-info/
+dist/
+build/

@@ -1,0 +1,43 @@
+[project]
+name = "media-tool"
+version = "0.1.0"
+description = "独立的图片与视频人脸匹配、换脸和增强工具"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy==1.26.4",
+    "opencv-python==4.10.0.84",
+    "onnx==1.17.0",
+    "onnxruntime==1.23.2",
+    "torch==2.4.1",
+    "pillow==11.3.0",
+    "pillow-heif==0.22.0",
+    "av==14.2.0",
+    "python-dotenv==1.1.1",
+]
+
+[project.scripts]
+media-tool = "media_tool.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest>=8.4,<9", "ruff>=0.13,<0.14"]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["models: 需要本地模型的真实推理验证"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["src/media_tool/vendor"]
